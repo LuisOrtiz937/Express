@@ -9,16 +9,9 @@ export class Role extends Model {
 
 Role.init(
   {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    },
+    id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
     name: { type: DataTypes.STRING, allowNull: false, unique: true },
     description: { type: DataTypes.STRING, allowNull: true },
   },
-  {
-    tableName: 'roles',
-    sequelize,
-  }
+  { sequelize, tableName: 'roles' }
 );

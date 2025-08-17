@@ -1,17 +1,21 @@
-import { User } from '../models/User';
+// src/services/authService.ts
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import Redis from 'ioredis';
+import { User, Role } from '../models';
 
 dotenv.config();
 
-// Conexión a Redis
-const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+export const registerUser = async (username: string, email: string, password: string, roleName: string) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await User.create({ username, email, password: hashedPassword });
 
-export const registerUser = async (username: string, email: string, password: string) => {
-  const user = await User.create({ username, email, password });
-  return user;
+  const role = await Role.findOne({ where: { name: roleName }, include: ['permissions'] });
+  if (!role) throw new Error('Role not found');
+
+  await user.addRole(role);
+
+  return { user, roles: [role] };
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -21,21 +25,8 @@ export const loginUser = async (email: string, password: string) => {
   const match = await bcrypt.compare(password, user.password);
   if (!match) throw new Error('Invalid password');
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '1h' });
+  // Guardamos el id del usuario en el token
+  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
+
   return { user, token };
-};
-
-export const logoutUser = async (token: string) => {
-  const payload: any = jwt.decode(token);
-  if (!payload?.exp) return;
-
-  const expiresIn = payload.exp - Math.floor(Date.now() / 1000);
-  if (expiresIn > 0) {
-    await redis.set(token, 'revoked', 'EX', expiresIn);
-  }
-};
-
-export const isTokenRevoked = async (token: string) => {
-  const revoked = await redis.get(token);
-  return !!revoked;
 };

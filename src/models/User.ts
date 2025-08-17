@@ -1,7 +1,6 @@
-import { DataTypes, Model, BelongsToManyAddAssociationMixin } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../config/database';
 import bcrypt from 'bcrypt';
-import { Role } from './Role';
 
 export class User extends Model {
   public id!: string;
@@ -10,10 +9,6 @@ export class User extends Model {
   public password!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
-  // ✅ Métodos de asociación generados por Sequelize
-  public addRole!: BelongsToManyAddAssociationMixin<Role, string>;
-  public addRoles!: BelongsToManyAddAssociationMixin<Role, string>;
 }
 
 User.init(
@@ -38,4 +33,3 @@ User.init(
     },
   }
 );
-

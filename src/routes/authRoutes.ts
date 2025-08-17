@@ -5,6 +5,9 @@ import { logoutUser } from '../services/authService';
 
 const router = Router();
 
+router.post('/register', register);
+router.post('/login', login);
+
 router.post('/logout', async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -17,8 +20,5 @@ router.post('/logout', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
-router.post('/register', register);
-router.post('/login', login);
 
 export default router;

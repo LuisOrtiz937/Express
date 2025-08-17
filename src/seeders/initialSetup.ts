@@ -45,9 +45,9 @@ export const initialSetup = async () => {
     // ------------------------
     const hashedPassword = await bcrypt.hash('admin1234', 10);
     const [adminUser, userCreated] = await User.findOrCreate({
-      where: { email: 'admin@ecommerce.com' },
-      defaults: { username: 'superadmin', email: 'admin@ecommerce.com', password: hashedPassword },
-    });
+  where: { email: 'admin@ecommerce.com' },
+  defaults: { username: 'superadmin', email: 'admin@ecommerce.com', password: 'admin1234' },
+});
 
     if (userCreated) {
       await adminUser.addRole(roles['Admin']); // llena UserRoles
