@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",                       // Código moderno compatible con Node.js
+    "module": "CommonJS",                     // Sistema de módulos de Node.js
+    "rootDir": "./src",                        // Carpeta con el código TypeScript
+    "outDir": "./dist",                        // Carpeta donde se compila el JS
+    "strict": true,                            // Activa todas las verificaciones estrictas
+    "esModuleInterop": true,                   // Permite importar módulos CommonJS fácilmente
+    "forceConsistentCasingInFileNames": true, // Evita errores por mayúsculas/minúsculas en imports
+    "skipLibCheck": true,                      // Ignora chequeo de tipos en librerías externas
+    "sourceMap": true                          // Genera mapas de fuente para depuración
+  }
+}
